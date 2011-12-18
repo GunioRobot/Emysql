@@ -47,12 +47,12 @@
 <li><tt>Row = [<a href="#type-record">record()</a>]</tt></li>
 </ul></p>
 </div><p><p>package row data as records</p>
- 
-  <p>RecordName is the name of the record to generate.  
+
+  <p>RecordName is the name of the record to generate.
 Fields are the field names to generate for each record.</p>
- 
+
   <p>-module(fetch_example).</p>
- 
+
   fetch_foo() -&gt;
  	Res = emysql:execute(pool1, "select * from foo"),
  	Res:as_record(foo, record_info(fields, foo)).</p>

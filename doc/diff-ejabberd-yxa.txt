@@ -5,7 +5,7 @@ Both depend on Magnus Ahltorp's code. Half of the difference are simply changed
 comments, as Yxa went edoc. The remainder are mostly result inspection extensions
 on the part of the ejabberd source.
 
-This diff includes changes to comments. Find one ignoring comments here: 
+This diff includes changes to comments. Find one ignoring comments here:
 https://github.com/Eonblast/Emysql/blob/master/doc/diff-ejabberd-yxa-2.txt
 
 Yxa: https://github.com/fredrikt/yxa/tree/master/src/mysql/
@@ -53,11 +53,11 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 < 	 get_result_rows/1,
 < 	 get_result_affected_rows/1,
 < 	 get_result_reason/1,
-< 
+<
 81,84c64
 < 	 connect/7,
 < 	 stop/0,
-< 
+<
 <      gc_each/1
 ---
 > 	 connect/7
@@ -106,10 +106,10 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 173,178d154
 < stop() ->
 <     gen_server:call(?SERVER, stop).
-< 
+<
 < gc_each(Millisec) ->
 <     gen_server:call(?SERVER, {gc_each, Millisec}).
-< 
+<
 180,189c156,169
 < %% Function: fetch(Id, Query)
 < %%           fetch(Id, Query, Timeout)
@@ -145,7 +145,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 < %%--------------------------------------------------------------------
 < get_result_field_info(#mysql_result{fieldinfo = FieldInfo}) ->
 <     FieldInfo.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: get_result_rows(MySQLRes)
 < %%           MySQLRes = term(), result of fetch function on "data"
@@ -155,7 +155,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 < %%--------------------------------------------------------------------
 < get_result_rows(#mysql_result{rows=AllRows}) ->
 <     AllRows.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: get_result_affected_rows(MySQLRes)
 < %%           MySQLRes = term(), result of fetch function on "updated"
@@ -165,7 +165,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 < %%--------------------------------------------------------------------
 < get_result_affected_rows(#mysql_result{affectedrows=AffectedRows}) ->
 <     AffectedRows.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: get_result_reason(MySQLRes)
 < %%           MySQLRes = term(), result of fetch function on "error"
@@ -175,7 +175,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 < %%--------------------------------------------------------------------
 < get_result_reason(#mysql_result{error=Reason}) ->
 <     Reason.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: quote(String)
 < %%           String = string()
@@ -330,7 +330,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 > %% @end
 414a370,371
 > %% @clear
-> 
+>
 417,427c374,389
 < %% Function: handle_call({fetch, Id, Query}, From, State)
 < %%           Id    = term(), connection-group id
@@ -398,7 +398,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 472,487d442
 < handle_call(stop, _From, State) ->
 <     {stop, normal, State};
-< 
+<
 < handle_call({gc_each, Millisec}, _From, State) ->
 <     case State#state.gc_tref of
 <         undefined -> ok;
@@ -411,7 +411,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 <         {error, Reason} ->
 <             {reply, {error, Reason}, State}
 <     end;
-< 
+<
 494,498c449,456
 < %% Function: handle_cast(Msg, State)
 < %% Descrip.: Handling cast messages
@@ -428,9 +428,9 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 > %% @hidden
 > %% @end
 499a458,460
-> 
+>
 > %% @clear
-> 
+>
 506,510c467,474
 < %% Function: handle_info(Msg, State)
 < %% Descrip.: Handling all non call/cast messages
@@ -448,7 +448,7 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 > %% @end
 512a477,478
 > %% @clear
-> 
+>
 514,526c480,495
 < %% Function: handle_info({'DOWN', ...}, State)
 < %% Descrip.: Handle a message that one of our monitored processes
@@ -485,8 +485,8 @@ diff ejabberd-modules/mysql/trunk/mysql.erl yxa-1.0/src/mysql/mysql.erl
 <     [erlang:garbage_collect(C#mysql_connection.conn_pid) || C <- Connections],
 <     erlang:garbage_collect(self()),
 <     {noreply, State};
-< 
-< 
+<
+<
 562,564c525,529
 < %% Function: terminate(Reason, State)
 < %% Descrip.: Shutdown the server
@@ -782,7 +782,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 > %% @end
 121,135d99
 <     post_start(Pid, LogFun).
-< 
+<
 < start_link(Host, Port, User, Password, Database, LogFun) when is_list(Host), is_integer(Port), is_list(User),
 < 							 is_list(Password), is_list(Database) ->
 <     ConnPid = self(),
@@ -790,7 +790,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 < 			init(Host, Port, User, Password, Database, LogFun, ConnPid)
 < 		end),
 <     post_start(Pid, LogFun).
-< 
+<
 < %% part of start/6 or start_link/6:
 < post_start(Pid, _LogFun) ->
 <     %%Timeout = get_option(timeout, Options, ?DEFAULT_STANDALONE_TIMEOUT),
@@ -853,7 +853,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 > %%          are not running stand-alone (From = gen_server From).
 > %% @end
 173d132
-< 
+<
 175,177c134
 <     squery(Pid, Query, From, []).
 < fetch(Pid, Query, From, Timeout) ->
@@ -901,11 +901,11 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 < 	    stop(Pid),
 < 	    {error, "query timed out"}
 <     end.
-< 
+<
 < stop(Pid) ->
 <     Pid ! close.
-< 
-< 
+<
+<
 220,229c154,160
 < %% Function: do_recv(LogFun, RecvPid, SeqNum)
 < %%           LogFun  = undefined | function() with arity 3
@@ -1019,10 +1019,10 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 ---
 > 		    GenSrvFrom ! {fetch_result, self(), Res};
 320,323d259
-< 		    %% the timer is canceled in wait_fetch_result/2, but we wait on that funtion only if the query 
-< 		    %% was not sent using the mysql gen_server. So we at least should try to cancel the timer here 
+< 		    %% the timer is canceled in wait_fetch_result/2, but we wait on that funtion only if the query
+< 		    %% was not sent using the mysql gen_server. So we at least should try to cancel the timer here
 < 		    %% (no warranty, the gen_server can still receive timeout messages)
-< 		    erlang:cancel_timer(Ref),  
+< 		    erlang:cancel_timer(Ref),
 333,334d268
 < 	close ->
 < 	    close_connection(State);
@@ -1207,12 +1207,12 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 < 		    {Field, Rest5} = get_with_length(Rest4),
 < 		    %% OrgField is the real field name if Field is an alias
 < 		    {_OrgField, Rest6} = get_with_length(Rest5),
-< 
+<
 < 		    <<_Metadata:8/little, _Charset:16/little,
 < 		     Length:32/little, Type:8/little,
 < 		     _Flags:16/little, _Decimals:8/little,
 < 		     _Rest7/binary>> = Rest6,
-< 
+<
 < 		    This = {binary_to_list(Table),
 < 			    binary_to_list(Field),
 < 			    Length,
@@ -1253,7 +1253,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 > 		    {ok, This} = get_row(N, Packet, []),
 > 		    get_rows(N, LogFun, RecvPid, [This | Res])
 544d448
-< 
+<
 546c450
 < get_row(0, _Data, _ResultType, Res) ->
 ---
@@ -1275,14 +1275,14 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 <     get_row(N - 1, Rest, ResultType, [This | Res]).
 ---
 >     get_row(N - 1, Rest, [This | Res]).
-> 
+>
 574,579d473
 < close_connection(State) ->
 <     Result = gen_tcp:close(State#state.socket),
 <     mysql:log(State#state.log_fun,  normal, "Closing connection ~p: ~p~n", [State#state.socket, Result]),
 <     Result.
-< 
-< 
+<
+<
 581,588c475,484
 < %% Function: do_query(State, Query)
 < %%           do_query(Sock, RecvPid, LogFun, Query)
@@ -1341,7 +1341,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 > %% @doc     Send a packet to the MySQL server.
 > %% @end
 623,693d517
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: normalize_version(Version, LogFun)
 < %%           Version  = string()
@@ -1362,7 +1362,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 <     mysql:log(LogFun, error, "MySQL version not supported: MySQL Erlang module might not work correctly.~n"),
 <     %% Error, but trying the oldest protocol anyway:
 <     ?MYSQL_4_0.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: get_field_datatype(DataType)
 < %%           DataType = integer(), MySQL datatype
@@ -1395,7 +1395,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 < get_field_datatype(253) -> 'VAR_STRING';
 < get_field_datatype(254) -> 'STRING';
 < get_field_datatype(255) -> 'GEOMETRY'.
-< 
+<
 < %%--------------------------------------------------------------------
 < %% Function: get_option(Key1, Options, Default) -> Value1
 < %%           Options = [Option]
@@ -1404,7 +1404,7 @@ diff ejabberd-modules/mysql/trunk/mysql_conn.erl yxa-1.0/src/mysql/mysql_conn.er
 < %%           Value1 = Value2 = Default = term()
 < %% Descrip.: Return the option associated with Key passed to squery/4
 < %%--------------------------------------------------------------------
-< 
+<
 < get_option(Key, Options, Default) ->
 <     case lists:keysearch(Key, 1, Options) of
 < 	{value, {_, Value}} ->
@@ -1512,4 +1512,4 @@ diff ejabberd-modules/mysql/trunk/mysql_recv.erl yxa-1.0/src/mysql/mysql_recv.er
 > %%          now, and if so - send them to Parent.
 > %% @end
 Only in yxa-1.0/src/mysql/: overview.edoc
-cube:~ hd$ 
+cube:~ hd$

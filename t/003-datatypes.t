@@ -30,7 +30,7 @@ main(_) ->
 		foo_blob BLOB )",
 	Foo = emysql:execute(test1, TblDef),
 	etap:is(is_record(Foo, ok_packet), true, "create table ok"),
-	
+
 	FooInsert = "INSERT INTO foo VALUES (
 		1.0,
 		2,
@@ -52,7 +52,7 @@ main(_) ->
 
 	Select = emysql:execute(test1, "SELECT * FROM foo"),
 	[Row] = Select#result_packet.rows,
-	
+
 	etap:is(lists:nth(1, Row), 1, "decimal matches"),
 	etap:is(lists:nth(2, Row), 2, "tinyint matches"),
 	%etap:is(lists:nth(3, Row), 999999999, "long matches"),
@@ -67,5 +67,5 @@ main(_) ->
 	etap:is(lists:nth(12, Row), <<"asdf">>, "varchar matches"),
 	etap:is(lists:nth(13, Row), 1, "bit matches"),
 	etap:is(lists:nth(14, Row), <<"asdf">>, "blob matches"),
-		
+
     etap:end_tests().

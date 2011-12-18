@@ -21,7 +21,7 @@
 %
 % $ ./b_raw
 %
-% - or - 
+% - or -
 %
 % Make emysql and start this sample directly, along these lines:
 %
@@ -57,11 +57,11 @@ run() ->
 	%% -------------------------------------------------------------------
 	%% Use sasl                                                          1
 	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+
 	application:start(sasl),
-	
+
 	%% -------------------------------------------------------------------
-	
+
 	crypto:start(),
 	application:start(emysql),
 
@@ -75,14 +75,14 @@ run() ->
 	%% -------------------------------------------------------------------
 	%% Get complete Result, not merely {_,_,_,Result,_}, as a_hello.erl  2
 	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    
+
     Result = emysql:execute(hello_pool,
     	<<"select hello_text from hello_table">>),
-	
-	%% ------------------------------------------------------------------- 
+
+	%% -------------------------------------------------------------------
 
 	io:format("~n~s~n", [string:chars($-,72)]),
 	io:format("Result: ~p~n", [Result]),
 
     ok.
-    
+

@@ -3,7 +3,7 @@
 % H. Diedrich <hd2010@eonblast.com> - Eonblast http://www.eonblast.com
 % 11 Jun 2010
 % ------------------------------------------------------------------------
-% 
+%
 % This sample inserts 'Hello World!' into a mysql table and reads it back.
 %
 % If you have trouble, try the simpler and more sturdy 'b_raw' sample.
@@ -23,7 +23,7 @@
 %
 % $ ./a_hello
 %
-% - or - 
+% - or -
 %
 % Make emysql and start this sample directly, along these lines:
 %
@@ -60,4 +60,4 @@ run() ->
 	io:format("~n~p~n", [Result]),
 
     ok.
-    
+

@@ -1,5 +1,5 @@
 % Test setup for issue 7. Use it to kill and restart the mysql server underneath
-% and see what happens. See https://github.com/Eonblast/Emysql/issues/7 
+% and see what happens. See https://github.com/Eonblast/Emysql/issues/7
 % Use: erlc test7.erl && erl -pa ./ebin -s test7 run -s init stop -noshell
 
 -module(test7).
@@ -15,10 +15,10 @@ run() ->
 			"hello_database", utf8),
 
 		Pid = spawn(?MODULE, do, []),
-		
+
 		Mref = erlang:monitor(process, Pid),
 		wait(Pid, Mref).
-		
+
 do() ->
 		io:format("enter do~n"),
 
@@ -28,7 +28,7 @@ do() ->
     		<<"delete from hello_table">>),
 
 		io:format("insert do~n"),
-    		
+
 		emysql:execute(hello_pool,
 			<<"INSERT INTO hello_table SET hello_text = 'Hello World!'">>),
 
@@ -38,9 +38,9 @@ do() ->
 		io:format("Result ~n~p~n", [Result]),
 
 		receive after 10000 -> nil end,
-		
+
 		do().
-		
+
 wait(Pid, Mref) ->
 
 		case is_process_alive(Pid) of

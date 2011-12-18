@@ -18,7 +18,7 @@
 %
 % $ ./e_stored_procedure
 %
-% - or - 
+% - or -
 %
 % Make emysql and start this sample directly, along these lines:
 %
@@ -34,10 +34,10 @@
 %
 %   Connect
 %   -------
-%   
+%
 %   Create Record
 %   -------------
-%   
+%
 %   Test Select
 %   -----------
 %   {result_packet,6,
@@ -46,11 +46,11 @@
 %                          254,<<>>,33,60,0,0}],
 %                  [[<<"Hello World!">>],[<<"Hello World!">>]],
 %                  <<>>}
-%   
+%
 %   Create Stored Procedure
 %   -----------------------
 %   {ok_packet,1,0,0,2,0,[]}
-%   
+%
 %   Call Stored Procedure
 %   ---------------------
 %   [{result_packet,6,
@@ -60,7 +60,7 @@
 %                   [[<<"Hello World!">>],[<<"Hello World!">>]],
 %                   <<>>},
 %    {ok_packet,7,0,0,34,0,[]}]
-%   %   
+%   %
 % ------------------------------------------------------------------------
 
 -module(e_stored_procedure).
@@ -80,7 +80,7 @@ run() ->
 	emysql:execute(hello_pool,
 		<<"INSERT INTO hello_table SET hello_text = 'Hello World!'">>),
 
-	io:format("~nTest Select~n-----------~n", []), 
+	io:format("~nTest Select~n-----------~n", []),
 	Result1 = emysql:execute(hello_pool,
   	<<"select * from hello_table limit 2">>),
 	io:format("~p~n", [Result1]),
@@ -94,5 +94,5 @@ run() ->
 	Result3 = emysql:execute(hello_pool,
 	   	<<"call sp_hello();">>),
 		io:format("~p~n", [Result3]),
-	
+
 	done.

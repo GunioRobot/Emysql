@@ -6,10 +6,10 @@
 
 main(_) ->
     etap:plan(unknown),
-	
+
 	etap_application:load_ok(crypto, "Application 'crypto' loaded"),
 	etap_application:load_ok(emysql, "Application 'emysql' loaded"),
-	
+
 	[etap_can:loaded_ok(Module, lists:concat(["Module '", Module, "' loaded."])) || Module <- emysql:modules()],
 
 	application:set_env(emysql, pools, [
@@ -35,7 +35,7 @@ main(_) ->
 
 	etap_application:start_ok(crypto, "Application 'crypto' started"),
 	etap_application:start_ok(emysql, "Application 'emysql' started"),
-	
+
 	%% CHECK INITIAL STATE FOR CORRECT POOL AND CONNECTION RECORDS
 	(fun() ->
 		Pools = emysql_conn_mgr:pools(),
@@ -47,7 +47,7 @@ main(_) ->
 		etap:is(queue:len(Pool2#pool.available), 3, "pool2 contains correct number of connections"),
 		ok
 	 end)(),
-	
+
 	(fun() ->
 		Conn1 = emysql_conn_mgr:lock_connection(test1),
 		Pools = emysql_conn_mgr:pools(),
@@ -56,7 +56,7 @@ main(_) ->
 		etap:is(lists:filter(fun(C) -> C#connection.id == Conn1#connection.id end, queue:to_list(Pool1#pool.available)), [], "connection is not available"),
 		ok
 	 end)(),
-	
+
 	(fun() ->
 		Conn2 = emysql_conn_mgr:lock_connection(test1),
 		Pools = emysql_conn_mgr:pools(),
@@ -68,7 +68,7 @@ main(_) ->
 
 	etap:is((catch emysql_conn_mgr:lock_connection(undefined)), {'EXIT', pool_not_found}, "pool_not_found error returned successfully"),
 	etap:is((catch emysql_conn_mgr:unlock_connection(#connection{pool_id=test1})), {'EXIT', connection_not_found}, "connection_not_found error returned successfully"),
-		
+
 	application:stop(emysql),
 	application:load(emysql),
 	application:set_env(emysql, pools, [
@@ -81,10 +81,10 @@ main(_) ->
 			{database, "testdatabase"},
 			{encoding, 'utf8'}
 		]}
-	]),	
+	]),
 	application:start(emysql),
 	etap:is((catch emysql_conn_mgr:lock_connection(test1)), unavailable, "connection_pool_is_empty error returned successfully"),
-		
+
 	(fun() ->
 		etap:is(emysql:increment_pool_size(test1, 5), ok, "increment pool size"),
 		etap:is(queue:len((hd(emysql_conn_mgr:pools()))#pool.available), 5, "correct number of connections are open"),
@@ -94,12 +94,12 @@ main(_) ->
 		etap:is(queue:len((hd(emysql_conn_mgr:pools()))#pool.available), 0, "correct number of connections are open"),
 		ok
 	 end)(),
-	
+
 	application:stop(emysql),
 	application:unload(emysql),
 	application:load(emysql),
-	application:start(emysql),	
-	
+	application:start(emysql),
+
 	(fun() ->
 		etap:is(emysql_conn_mgr:pools(), [], "pools empty"),
 		etap:is(emysql:add_pool(test2, 1, "test", "test", "localhost", 3306, "testdatabase", 'utf8'), ok, "added pool"),
@@ -111,5 +111,5 @@ main(_) ->
 		etap:is(erlang:port_info(Conn#connection.socket), undefined, "socket has been closed"),
 		ok
 	 end)(),
-	
+
     etap:end_tests().

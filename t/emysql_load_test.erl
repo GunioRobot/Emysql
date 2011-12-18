@@ -10,7 +10,7 @@
 %% [emysql_load_test:select_all() || _ <- lists:seq(1,10)].
 %% emysql_tracer:trace_module(emysql_load_test, fun emysql_load_test:select_all/0).
 %% emysql_tracer:trace_module(emysql_load_test, fun emysql_load_test:select_all/0).
-%% emysql:execute(test1, <<"SELECT * FROM `user_games`">>). 
+%% emysql:execute(test1, <<"SELECT * FROM `user_games`">>).
 -module(emysql_load_test).
 -behaviour(gen_server).
 
@@ -27,22 +27,22 @@ start_link() ->
 	application:start(crypto),
 	application:start(emysql),
 	gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
-	
+
 add_pool() ->
 	gen_server:call(?MODULE, add_pool, infinity).
-	
+
 remove_pool() ->
 	gen_server:call(?MODULE, remove_pool, infinity).
-	
+
 increment_pool_size() ->
 	gen_server:call(?MODULE, increment_pool_size, infinity).
-	
+
 decrement_pool_size() ->
 	gen_server:call(?MODULE, decrement_pool_size, infinity).
 
 select_all() ->
 	gen_server:call(?MODULE, select_all, infinity).
-	
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -68,7 +68,7 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call(add_pool, _From, State) ->
-	NewPoolId = 
+	NewPoolId =
 		case lists:reverse(lists:usort([PoolId || #pool{pool_id=PoolId} <- emysql_conn_mgr:pools()])) of
 			[] ->
 				test1;
@@ -84,15 +84,15 @@ handle_call(add_pool, _From, State) ->
 	{ok, Encoding} = application:get_env(emysql, encoding),
 	Res = emysql:add_pool(NewPoolId, 1, User, Password, Host, Port, Database, Encoding),
 	{reply, Res, State};
-	
+
 handle_call(remove_pool, _From, State) ->
 	case emysql_conn_mgr:pools() of
 		[] ->
 			{reply, ok, State};
 		[Pool|_] ->
 			{reply, emysql:remove_pool(Pool#pool.pool_id), State}
-	end;	
-	
+	end;
+
 handle_call(increment_pool_size, _From, State) ->
 	case emysql_conn_mgr:pools() of
 		[] ->
@@ -108,7 +108,7 @@ handle_call(decrement_pool_size, _From, State) ->
 		[Pool|_] ->
 			{reply, emysql:decrement_pool_size(Pool#pool.pool_id, 1), State}
 	end;
-	
+
 handle_call(select_all, _From, State) ->
 	Pool = get_pool(),
 	I = random:uniform(length(tables())),
@@ -126,7 +126,7 @@ handle_call(select_all, _From, State) ->
 		end
 	end),
 	{reply, ok, State};
-		
+
 handle_call(_, _From, State) -> {reply, {error, invalid_call}, State}.
 
 %%--------------------------------------------------------------------

@@ -17,7 +17,7 @@ h2 {
 }
 
 h2.indextitle {
-	
+
 	font-size: 1em;
 }
 
@@ -26,7 +26,7 @@ h2.indextitle table {
 	border-bottom-right-radius: 1em;
 	border: 1px solid #3070a0;
 	padding: 1em;
-	
+
 	font-size: 0.9em;
 }
 
@@ -70,7 +70,7 @@ div.spec {
  	padding: .2em 1.1em .2em;
 	background-color: #eeeeee;
 	border-bottom-right-radius: 1em;
-	
+
 }
 a { color: inherit; padding: 2px; text-decoration: none; }
 
@@ -95,7 +95,7 @@ ul.index {
 	border-bottom-right-radius: 1em;
 	border: 1px solid #3070a0;
 	padding: 1em;
-	
+
 	font-size: 1.1em;
 }
 
@@ -105,7 +105,7 @@ ul.index li {
 	border-bottom: 1px solid white;
 	padding: 2px;
 }
- 
+
 ul {
 	list-style-type: square;
 }
@@ -118,7 +118,7 @@ table.index {
 	border-bottom-right-radius: 1em;
 	border: 1px solid #3070a0;
 	padding: 1em;
-	
+
 	font-size: 0.9em;
 }
 
@@ -138,7 +138,7 @@ td {
 }
 
 code {
-	font-size: 1.1em; 
+	font-size: 1.1em;
 }
 
 div.navbar {
@@ -166,14 +166,14 @@ a {
 h1 a, h2 a, h3 a, h4 a, h5 a {
 	color: black;
 	}
-	
+
 h3.function a {
 	color: white;
 	}
-	
-pre { margin: 1em; 
-	  padding: 1em; 
-	  background-color: #f0f0f0; 
+
+pre { margin: 1em;
+	  padding: 1em;
+	  background-color: #f0f0f0;
 	  border-radius: 1em; }
 span.comment {
 	color: dimgrey;

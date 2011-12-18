@@ -68,25 +68,25 @@ For <b>mnesia-style transactions</b>, one of the multiple '<a href="#22">erlang-
 
 <h4><a name="Hello_World">Hello World</a></h4>
 
-This is a hello world program. Follow the three steps below to try it out. 
+This is a hello world program. Follow the three steps below to try it out.
 <pre> -module(a_hello).
  -export([run/0]).
- 
+
  run() -&gt;
- 
+
  	crypto:start(),
  	application:start(emysql),
- 
+
  	emysql:add_pool(hello_pool, 1,
  		"hello_username", "hello_password", "localhost", 3306,
  		"hello_database", utf8),
- 
+
  	emysql:execute(hello_pool,
  		&lt;&lt;"INSERT INTO hello_table SET hello_text = 'Hello World!'"&gt;&gt;),
- 
+
      Result = emysql:execute(hello_pool,
  		&lt;&lt;"select hello_text from hello_table"&gt;&gt;),
- 
+
  	io:format("~n~p~n", [Result]).</pre>
 
 
@@ -101,13 +101,13 @@ This is a hello world program. Follow the three steps below to try it out.
 <h4><a name="Executing_a_Prepared_Statement">Executing a Prepared Statement</a></h4>
 
 <pre> emysql:prepare(my_stmt, &lt;&lt;"SELECT * from mytable WHERE id = ?"&gt;&gt;).
- 
+
  emysql:execute(my_pool, my_stmt, [1]).</pre>
 
 <h4><a name="Executing_Stored_Procedures">Executing Stored Procedures</a></h4>
 
 <pre> emysql:execute(my_pool, &lt;&lt;"create procedure my_sp() begin select * from mytable; end"&gt;&gt;).
- 
+
  emysql:execute(my_pool, &lt;&lt;"call my_sp();"&gt;&gt;).</pre>
 
 <h4><a name="Result_Record">Result Record</a></h4>
@@ -203,66 +203,66 @@ or (after building emysql.app and the database, as explained above), start a_hel
 <h5><a name="Adding_a_Pool">Adding a Pool</a></h5>
 
 <pre> % emysql:add_pool(PoolName, PoolSize, Username, Password, Host, Port, Database, Encoding) -&gt;
- %	 ok | {error, pool_already_exists}  
- % PoolName = atom()  
- % PoolSize = integer()  
- % Username = string()  
- % Password = string()  
- % Host = string()  
- % Port = integer()  
- % Database = string()  
- % Encoding = atom()  
- 
+ %	 ok | {error, pool_already_exists}
+ % PoolName = atom()
+ % PoolSize = integer()
+ % Username = string()
+ % Password = string()
+ % Host = string()
+ % Port = integer()
+ % Database = string()
+ % Encoding = atom()
+
  emysql:add_pool(mypoolname, 1, "username", "mypassword", "localhost", 3306, "mydatabase", utf8).</pre>
 
 <h5><a name="More_Record_Types">More Record Types</a></h5>
 
 <pre> -record(result_packet, {seq_num, field_list, rows, extra}).
- 
+
  -record(ok_packet, {seq_num, affected_rows, insert_id, status, warning_count, msg}).
- 
+
  -record(error_packet, {seq_num, code, msg}).</pre>
 
 <p>For other record types, see include/emysql.hrl.</p>
 
 <h5><a name="Executing_SQL_Statements">Executing SQL Statements</a></h5>
 
-<pre> % emysql:execute(PoolName, Statement) -&gt; result_packet() | ok_packet() | error_packet()  
- % PoolName = atom()  
- % Statement = string() | binary()  
- 
+<pre> % emysql:execute(PoolName, Statement) -&gt; result_packet() | ok_packet() | error_packet()
+ % PoolName = atom()
+ % Statement = string() | binary()
+
  emysql:execute(mypoolname, &lt;&lt;"SELECT * from mytable"&gt;&gt;).
  # result_packet{field_list=[...], rows=[...]}
- 
+
  emysql:execute(mypoolname, &lt;&lt;"UPDATE mytable SET bar = 'baz' WHERE id = 1"&gt;&gt;).
  # ok_packet{affected_rows=1}</pre>
 
 <h5><a name="Executing_Prepared_Statements">Executing Prepared Statements</a></h5>
 
-<pre> % emysql:prepare(StmtName, Statement) -&gt; ok  
- % StmtName = atom()  
- % Statement = binary() | string()  
- 
+<pre> % emysql:prepare(StmtName, Statement) -&gt; ok
+ % StmtName = atom()
+ % Statement = binary() | string()
+
  emysql:prepare(my_stmt, &lt;&lt;"SELECT * from mytable WHERE id = ?"&gt;&gt;).
  # ok</pre>
 
-<pre> % emysql:execute(PoolName, StmtName, Args) -&gt; result_packet() | ok_packet() | error_packet()  
- % StmtName = atom()  
- % Args = [term()]  
- 
+<pre> % emysql:execute(PoolName, StmtName, Args) -&gt; result_packet() | ok_packet() | error_packet()
+ % StmtName = atom()
+ % Args = [term()]
+
  emysql:execute(mypoolname, my_stmt, [1]).
  #result_packet{field_list=[...], rows=[...]}</pre>
 
 <h5><a name="Executing_Stored_Procedures">Executing Stored Procedures</a></h5>
 
-<pre> % emysql:execute(PoolName, StmtName, Args) -&gt; result_packet() | ok_packet() | error_packet()  
- % StmtName = atom()  
- % Args = [term()]  
- 
+<pre> % emysql:execute(PoolName, StmtName, Args) -&gt; result_packet() | ok_packet() | error_packet()
+ % StmtName = atom()
+ % Args = [term()]
+
  emysql:execute(hello_pool,
  	&lt;&lt;"create procedure sp_hello() begin select * from hello_table; end"&gt;&gt;).
  {ok_packet,1,0,0,2,0,[]}
- 
+
  emysql:execute(hello_pool, &lt;&lt;"call sp_hello();"&gt;&gt;).
  [{result_packet,6,
                  [{field,2,&lt;&lt;"def"&gt;&gt;,&lt;&lt;"hello_database"&gt;&gt;,&lt;&lt;"hello_table"&gt;&gt;,
@@ -271,20 +271,20 @@ or (after building emysql.app and the database, as explained above), start a_hel
                  [[&lt;&lt;"Hello World!"&gt;&gt;],[&lt;&lt;"Hello World!"&gt;&gt;]],
                  &lt;&lt;&gt;&gt;},
  {ok_packet,7,0,0,34,0,[]}]</pre>
- 
+
  <p>Note that you are getting back a list of results here.</p>
- 
+
 <h5><a name="Converting_Row_Data_To_Records">Converting Row Data To Records</a></h5>
 
-<pre> % emysql_util:as_record(ResultPacket, RecordName, Fields) -&gt; Result  
- % ResultPacket = result_packet()  
- % RecordName = atom() (the name of the record to generate)  
- % Fields = [atom()] (the field names to generate for each record)  
- % Result = [record()]  
- 
+<pre> % emysql_util:as_record(ResultPacket, RecordName, Fields) -&gt; Result
+ % ResultPacket = result_packet()
+ % RecordName = atom() (the name of the record to generate)
+ % Fields = [atom()] (the field names to generate for each record)
+ % Result = [record()]
+
  -module(fetch_example).
  -record(foo, {bar, baz, bat}).
- 
+
  fetch_foo() -&gt;
     Result = emysql:execute(pool1, &lt;&lt;"select bar, baz, bat from foo"&gt;&gt;),
     Recs = emysql_util:as_record(Result, foo, record_info(fields, foo)),
@@ -390,11 +390,11 @@ Eonblast Corporation <a href="http://www.eonblast.com" target="_top"><tt>http://
 
 <p>Permission is  hereby  granted,  free of charge,  to any person
 obtaining  a copy of this software and associated documentation
-files  (the  "Software"),  to  deal  in  the  Software  without 
+files  (the  "Software"),  to  deal  in  the  Software  without
 restriction,  including  without limitation  the rights to use,
-copy, modify,  merge,  publish, distribute,  sublicense, and/or 
+copy, modify,  merge,  publish, distribute,  sublicense, and/or
 sell  copies of the  Software,  and to permit  persons  to whom
-the  Software  is furnished to do so,  subject to the following 
+the  Software  is furnished to do so,  subject to the following
 conditions:</p>
 
 <p>The above copyright notice and this permission notice shall be

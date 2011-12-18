@@ -15,14 +15,14 @@ main(_) ->
 	?DROP_TABLES(test1),
 
 	Foo = emysql:execute(test1, "CREATE TABLE foo (
-									id int(32) NOT NULL AUTO_INCREMENT, 
-									name varchar(50) NOT NULL, 
-									falafel varchar(20) NULL, 
-									hummus float DEFAULT 0.0, 
+									id int(32) NOT NULL AUTO_INCREMENT,
+									name varchar(50) NOT NULL,
+									falafel varchar(20) NULL,
+									hummus float DEFAULT 0.0,
 									PRIMARY KEY (id)
 								)"),
 	etap:is(is_record(Foo, ok_packet), true, "create table returned ok packet"),
-	
+
 	[begin
 		Abc = emysql:execute(test1, "INSERT INTO foo (name) VALUES ('abc" ++ integer_to_list(I) ++ "')"),
 		etap:is(Abc#ok_packet.insert_id, I, "auto increment value ok")
@@ -47,5 +47,5 @@ main(_) ->
 	 {foo,undefined,<<"abc5">>,5}
 	],
 	etap:is(AllRecs, ExpectedRecs, "record data matches"),
-	
+
     etap:end_tests().

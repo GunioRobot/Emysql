@@ -17,7 +17,7 @@
 %
 % $ ./d_prepared_statement
 %
-% - or - 
+% - or -
 %
 % Make emysql and start this sample directly, along these lines:
 %
@@ -61,20 +61,20 @@ run() ->
 	emysql:execute(hello_pool,
 		<<"INSERT INTO hello_table SET hello_text = 'Hello World!'">>),
 
-	%% ------------------------------------------------------------------- 
+	%% -------------------------------------------------------------------
 	%% Stored procedure:
 	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	emysql:prepare(hello_stmt, 
+	emysql:prepare(hello_stmt,
 		<<"SELECT * from hello_table WHERE hello_text like ?">>),
 
 	Result = emysql:execute(hello_pool, hello_stmt, ["Hello%"]),
 
-	%% ------------------------------------------------------------------- 
+	%% -------------------------------------------------------------------
 
 	io:format("~n~s~n", [string:chars($-,72)]),
 	io:format("Result: ~p~n", [Result]),
 
     ok.
-    
+
 

@@ -42,15 +42,15 @@ precondition(S, {call, ?MODULE, increment_pool_size, [_PoolId, Num]}) ->
 precondition(S, {call, ?MODULE, decrement_pool_size, [_PoolId, Num]}) ->
 	S#state.num_conns - Num >= 1;
 
-precondition(_S, {call, ?MODULE, create_table, [_PoolId, _Name, Columns]}) ->	
+precondition(_S, {call, ?MODULE, create_table, [_PoolId, _Name, Columns]}) ->
 	length(lists:usort([string:to_lower(K) || {K,_} <- Columns])) == length(Columns);
 
-precondition(S, {call, ?MODULE, drop_table, [_PoolId, {Name, _}]}) ->	
+precondition(S, {call, ?MODULE, drop_table, [_PoolId, {Name, _}]}) ->
 	proplists:is_defined(Name, S#state.tables);
 
 precondition(S, {call, ?MODULE, call_insert, [_PoolId, {Name, _}]}) ->
 	proplists:is_defined(Name, S#state.tables) andalso lists:member(Name, S#state.insert_statements);
-	
+
 precondition(_, _) -> true.
 
 %% #############################################################################
@@ -70,13 +70,13 @@ next_state(S, _V, {call, ?MODULE, create_table, [_PoolId, Name, Columns]}) ->
 		true ->
 			S
 	end;
-	
+
 next_state(S, _V, {call, ?MODULE, drop_table, [_PoolId, {Name, _}]}) ->
 	S#state{tables = proplists:delete(Name, S#state.tables)};
 
 next_state(S, _V, {call, ?MODULE, prepare_insert, [_PoolId, {TableName, _}]}) ->
 	S#state{insert_statements = [TableName|S#state.insert_statements]};
-		
+
 next_state(S, _, _) -> S.
 
 %% #############################################################################
@@ -91,14 +91,14 @@ postcondition(_S, {call, ?MODULE, decrement_pool_size, [_PoolId, _Num]}, Result)
 
 postcondition(_S, {call, ?MODULE, show_tables, [_PoolId]}, Result) ->
 	is_record(Result, result_packet);
-	
+
 postcondition(_S, {call, ?MODULE, create_table, [_PoolId, _Name, _Columns]}, Result) ->
 	case Result of
 		Err when is_record(Err, error_packet) ->
 			case Err:code() of
 				1050 -> %% table already exists
 					true;
-				_ -> 
+				_ ->
 					false
 			end;
 		_ ->
@@ -133,10 +133,10 @@ postcondition(_S, {call, ?MODULE, prepare_insert, [_PoolId, {_Name, _}]}, Result
 
 postcondition(_S, {call, ?MODULE, call_insert, [_PoolId, {_Name, _}]}, Result) ->
 	is_record(Result, ok_packet) andalso 1 == Result:affected_rows();
-				
+
 postcondition(_S, {call, ?MODULE, timeout, [_PoolId]}, Result) ->
 	Result == {'EXIT', mysql_timeout};
-				
+
 postcondition(_, _, _) -> true.
 
 %% #############################################################################
@@ -157,10 +157,10 @@ increment_pool_size(PoolId, Num) ->
 
 decrement_pool_size(PoolId, Num) ->
 	emysql:decrement_pool_size(PoolId, Num).
-	
+
 column() ->
 	{column_name(), column_type()}.
-	
+
 column_name() ->
 	?SUCHTHAT(X, list(alpha()), length(X) > 0).
 	%?SUCHTHAT(X, [alpha()] ++ list(safe_char()), length(X) > 0 andalso hd(lists:reverse(X)) =/= 32).
@@ -186,13 +186,13 @@ data_for_type("BLOB") -> list(char()).
 table_name() ->
 	?SUCHTHAT(X, list(alpha()), length(X) > 0).
 	%?SUCHTHAT(X, [alpha()] ++ list(safe_char()), length(X) > 0 andalso hd(lists:reverse(X)) =/= 32).
-	
+
 alpha() ->
 	oneof([
 		%%choose(65,90),
 		choose(97,122)
 	]).
-	
+
 safe_char() ->
 	oneof([
 		choose(32,95),
@@ -216,18 +216,18 @@ column_type() ->
 		"BIT",
 		"BLOB"
 	]).
-		
+
 show_tables(PoolId) ->
 	(catch emysql:execute(PoolId, "SHOW TABLES")).
-	
+
 create_table(PoolId, TableName, Columns) ->
 	ColumnDefs = ["`" ++ CName ++ "` " ++ CType || {CName, CType} <- Columns],
 	Query = "CREATE TABLE IF NOT EXISTS `" ++ TableName ++ "` ( " ++ string:join(ColumnDefs, ", ") ++ ")",
 	(catch emysql:execute(PoolId, Query)).
-			
+
 drop_table(PoolId, {TableName, _}) ->
 	(catch emysql:execute(PoolId, "DROP TABLE `" ++ TableName ++ "`")).
-		
+
 prepare_insert(PoolId, {TableName, _}) ->
 	case (catch emysql:execute(PoolId, "DESC `" ++ TableName ++ "`")) of
 		Result when is_record(Result, result_packet) ->
@@ -237,13 +237,13 @@ prepare_insert(PoolId, {TableName, _}) ->
 		Err ->
 			Err
 	end.
-	
+
 call_insert(PoolId, {TableName, Args}) ->
 	(catch emysql:execute(PoolId, list_to_atom(TableName), Args)).
-		
+
 timeout(PoolId) ->
 	(catch emysql:execute(PoolId, "SELECT SLEEP(8)", 10)).
-		
+
 init() ->
 	error_logger:tty(false),
     ok = load_app(crypto),

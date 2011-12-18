@@ -22,7 +22,7 @@
 %
 % $ ./c_rows_as_records
 %
-% - or - 
+% - or -
 %
 % Make emysql and start this sample directly, along these lines:
 %
@@ -71,9 +71,9 @@ run() ->
 
 	Result = emysql:execute(hello_pool, <<"SELECT * from hello_table">>),
 
-	%% ------------------------------------------------------------------- 
+	%% -------------------------------------------------------------------
 	%% Records Fetch:                                                    2
-	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	Recs = emysql_util:as_record(
 		Result, hello_record, record_info(fields, hello_record)),
@@ -84,12 +84,12 @@ run() ->
 
 	%% -------------------------------------------------------------------
 	%% Records Use:                                                      3
-	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	%% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	[begin
       io:format("Record: ~p~n", [Rec#hello_record.hello_text])
     end || Rec <- Recs],
-    
+
 	%% -------------------------------------------------------------------
 
     ok.
